@@ -11,7 +11,7 @@ Healthruwords Slider - Inspirational Quotes to empower people.
 
 == Description ==
 
-Ever wanted to empower your audience with some unique Inspirational Healthruwords Quotes. The renown HealThruWords already inspire millions every month through social media, offer the best motivational quotes on earth to your community.
+Ever wanted to empower your audience with some unique Inspirational Healthruwords Quotes. The renown HealThruWords quotes already inspire millions every month through social media. Offer the best motivational quotes on earth to your community!
 
 HealThruWords Slider Widget is a responsive slider widget that displays up to 20 Inspirational Quotes from http://HealThruWords.com.
 
