@@ -149,8 +149,11 @@ class HealthruwordsSlider extends WP_Widget {
 		$instance['controls']         = $new_instance['controls'];
 		$instance['animation']        = $new_instance['animation'];
 		$instance['slider_speed']	  = $new_instance['slider_speed'];
-		$opt_name  = 'jr_insta_' . md5($this->id);
+		$opt_name  = 'healthru_' . md5($this->id);
+		$args_save_opt='heal_args_'. md5($this->id);
+		
 		delete_transient($opt_name);
+		update_option($args_save_opt, $instance);
 		return $instance;
 	}
 	
@@ -407,11 +410,17 @@ class HealthruwordsSlider extends WP_Widget {
 	 * @return mixed
 	 */
 	public function shortcode( $atts ) {
-
+		
+		
 		$atts = shortcode_atts( array( 'id' => '' ), $atts, 'healthruwords' );
-		$args = get_option( 'widget_jr_insta_slider' );
-		if ( isset($args[$atts['id']] ) ) {
-			return $this->display_images( $args[$atts['id']] );
+		$opt='heal_args_'.md5('jr_insta_slider-'.$atts['id']);
+		$args = get_option($opt);
+		echo '<pre>';
+		print_r($args);
+		echo '</pre>';
+		//var_dump($args);
+		if ( isset($args ) ) {
+			return $this->display_images( $args ,true);
 		}
 	}
 
@@ -433,7 +442,7 @@ class HealthruwordsSlider extends WP_Widget {
 	 * 
 	 * @return string       
 	 */
-	private function display_images( $args ) {
+	private function display_images( $args, $is_shortcode=FALSE) {
 		
 		
 		$username         = isset( $args['username'] ) && !empty( $args['username'] ) ? $args['username'] : false;
@@ -453,7 +462,7 @@ class HealthruwordsSlider extends WP_Widget {
 		$controls         = isset( $args['controls'] ) ? $args['controls'] : 'prev_next';
 		$animation        = isset( $args['animation'] ) ? $args['animation'] : 'slide';
 		$description      = isset( $args['description'] ) ? $args['description'] : array();
-		$slider_speed     = isset( $args['slider_speed'] ) ? absint( $args['slider_speed'] ) : 700;
+		$slider_speed     = isset( $args['slider_speed'] )&& $args['slider_speed']!='' ? absint( $args['slider_speed'] ) : 7000;
 		$topic_list     = (isset( $args['topic_list']) && !empty($args['topic_list'])) ? $args['topic_list'] : array();
 		
 		/*if ( false == $username ) {
@@ -479,20 +488,22 @@ class HealthruwordsSlider extends WP_Widget {
 		$images_div_class = 'jr-insta-thumb';
 		$ul_class         = 'thumbnails jr_col_' . $columns;
 		$slider_script    = ''; 
-		
+		$selector='#'.$this->id;
+		if($is_shortcode)
+			$selector="";
 		if ( $template != 'thumbs' ) {
 			
 			$template_args['description'] = $description;
 			$direction_nav = ( $controls == 'prev_next' ) ? 'true' : 'false';
 			$control_nav   = ( $controls == 'numberless' ) ? 'true': 'false';
 			$ul_class      = 'slides';
-
+			
 			if ( $template == 'slider' ) {
 				$images_div_class = 'pllexislider pllexislider-normal';
 				$slider_script =
 				"<script type='text/javascript'>" . "\n" .
 				"	jQuery(document).ready(function($) {" . "\n" .
-				"		$('#{$this->id} .pllexislider-normal').pllexislider({" . "\n" .
+				"		$('{$selector} .pllexislider-normal').pllexislider({" . "\n" .
 				"			animation: '{$animation}'," . "\n" .
 				"			directionNav: {$direction_nav}," . "\n" .
 				"			controlNav: {$control_nav}," . "\n" .
@@ -509,7 +520,7 @@ class HealthruwordsSlider extends WP_Widget {
 	            $slider_script =
 				"<script type='text/javascript'>" . "\n" .
 				"	jQuery(document).ready(function($) {" . "\n" .
-				"		$('#{$this->id} .pllexislider-overlay').pllexislider({" . "\n" .
+				"		$('{$selector} .pllexislider-overlay').pllexislider({" . "\n" .
 				"			animation: '{$animation}'," . "\n" .
 				"			directionNav: {$direction_nav}," . "\n" .
 				"			slideshowSpeed: {$slider_speed}," . "\n" .
@@ -549,7 +560,7 @@ class HealthruwordsSlider extends WP_Widget {
 				$query_args['orderby']  = 'meta_value_num';
 				$query_args['order']    = $orderby[1];
 			}
-						
+			
 			$images_data = $this->healthruwords_data( $widget_name, $images_number, false ,$topic_list);
 			//print_r($images_data);
 			if (!empty( $images_data ) ) {
@@ -572,6 +583,7 @@ class HealthruwordsSlider extends WP_Widget {
 					$template_args['image'] = $image_data['media'];
 					$template_args['caption']   = $image_data['title'];
 					$template_args['description']   = $image_data['title'];
+					$template_args['prefix']   = $image_data['cat'];
 					
 					
 					$output .= $this->get_template( $template, $template_args );
@@ -599,12 +611,14 @@ class HealthruwordsSlider extends WP_Widget {
 			$time      = $args['timestamp'];
 			$username  = $args['username'];
 			$image_url = $args['image'];
+			$seo=$args['prefix'].'-'.$caption;
+			
 		
 		$time="";
 
 		$short_caption = wp_trim_words( $caption, 10 );
 
-		$image_src = '<img src="' . $image_url . '" alt="' . $short_caption . '" title="' . $short_caption . '" class="imgSlider" />';
+		$image_src = '<img src="' . $image_url . '" alt="' . $seo . '" title="' . $seo . '" class="imgSlider" />';
 		$image_output  = $image_src;
 
 		if ( $link_to ) {
@@ -617,7 +631,7 @@ class HealthruwordsSlider extends WP_Widget {
 			if ( ! empty( $args['link_class'] ) ) {
 				$image_output .= ' class="' . $args['link_class'] . '"';
 			}
-			$image_output .= ' title="' . $short_caption . '">' . $image_src . '</a>';
+			$image_output .= ' title="' . $seo . '" alt="'.$seo.'">' . $image_src . '</a>';
 		}		
 
 		$output = '';
@@ -667,7 +681,7 @@ class HealthruwordsSlider extends WP_Widget {
 							if ( $caption != '') {
 								//$caption   = preg_replace( '/@([a-z0-9_]+)/i', '&nbsp;<a href="http://healthruwords.com/$1" rel="nofollow" target="_blank">@$1</a>&nbsp;', $caption );
 								$output .= "<span class='jr-insta-caption'><a href='" . $link_to . "' target='_blank' class='".$args
-								['image_link_class']."'>{$caption}</a><a href='".$logo_link_to."' alt='' title='' target='_blank'><img src='https://healthruwords.com/wp-content/uploads/2014/10/logo-healthruwords.com_.png' width='155' height='35' style='float:right;'></a></span>\n";
+								['image_link_class']."' title='".$seo."' alt='".$seo."'>{$caption}</a><a href='".$logo_link_to."' title='".$seo."' alt='".$seo."' target='_blank'><img src='https://healthruwords.com/wp-content/uploads/2014/10/logo-healthruwords.com_.png' width='155' height='35' style='float:right;' title='".$seo."' alt='".$seo."'></a></span>\n";
 							}
 
 						$output .= "</div>\n";
@@ -703,7 +717,7 @@ class HealthruwordsSlider extends WP_Widget {
 	 */
 	private function healthruwords_data( $username, $nr_images, $attachment,$topic_list) {
 		
-		$opt_name  = 'jr_insta_' . md5( $this->id );
+		$opt_name  = 'healthru_' . md5( $this->id );
 		//delete_transient($opt_name);
 		$instaData = get_transient( $opt_name );
 		$user_opt  = (array) get_option( $opt_name );
@@ -724,7 +738,7 @@ class HealthruwordsSlider extends WP_Widget {
 
 				return $response->get_error_message();
 			}
-						
+			
 			if(empty($response)){
 
 				return $response['message'];
