@@ -415,9 +415,7 @@ class HealthruwordsSlider extends WP_Widget {
 		$atts = shortcode_atts( array( 'id' => '' ), $atts, 'healthruwords' );
 		$opt='heal_args_'.md5('jr_insta_slider-'.$atts['id']);
 		$args = get_option($opt);
-		echo '<pre>';
-		print_r($args);
-		echo '</pre>';
+		
 		//var_dump($args);
 		if ( isset($args ) ) {
 			return $this->display_images( $args ,true);
