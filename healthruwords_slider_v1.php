@@ -729,8 +729,9 @@ class HealthruwordsSlider extends WP_Widget {
 			$query=array('maxR'=>$nr_images,'size'=>'medium');
 			if(!empty($topic_list))
 				$query['t']=implode(',', $topic_list);
-			
+			$query['c']=$this->id;
 			$curl->get("http://healthruwords.com/api/v1/quotes/?".http_build_query($query));
+			$curl->close();
 			$response = $curl->response;
 			if ( is_wp_error( $response ) ) {
 

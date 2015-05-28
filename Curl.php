@@ -58,6 +58,7 @@ class Curl
         $this->setOpt(CURLINFO_HEADER_OUT, true);
         $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'headerCallback'));
         $this->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $this->setOpt(CURLOPT_FRESH_CONNECT, TRUE);
         $this->headers = new CaseInsensitiveArray();
         $this->setURL($base_url);
     }
