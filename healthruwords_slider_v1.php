@@ -609,7 +609,7 @@ class HealthruwordsSlider extends WP_Widget {
 			$time      = $args['timestamp'];
 			$username  = $args['username'];
 			$image_url = $args['image'];
-			$seo=$args['prefix'].'-'.$caption;
+			$seo=$args['prefix'].' - '.$caption;
 			
 		
 		$time="";
