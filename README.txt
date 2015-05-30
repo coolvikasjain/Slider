@@ -44,6 +44,11 @@ Installation consists of following steps:
 
 == Screenshots ==
 
+1. healthruwords slider plugin installed and appears in the plugins menu.
+2. healthruwords slider widget under Appearence->Widgets.
+3. healthruwords slider widget under Appearence->Widgets.
+4. healthruwords slider widget under Appearence->Widgets.
+5. healthruwords slider widget on front End .
 
 == Changelog ==
 
@@ -51,3 +56,5 @@ Installation consists of following steps:
 * Initial release
 
 
+= 1.05 =
+* Fixed issue with shortcode not working in posts and pages.

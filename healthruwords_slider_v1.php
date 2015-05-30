@@ -2,7 +2,7 @@
 /*
 Plugin Name: Healthruwords Slider
 Plugin URI: http://healthruwords.com/
-Version: 1.0
+Version: 1.05
 Description: Healthruwords Slider Widget is a responsive slider widget that shows 20 latest Quotes from Healthruwords API.
 Author: Arnaud Saint-Paul
 Author URI: http://healthruwords.com/
