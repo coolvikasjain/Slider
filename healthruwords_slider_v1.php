@@ -2,7 +2,7 @@
 /*
 Plugin Name: Healthruwords Slider
 Plugin URI: http://healthruwords.com/
-Version: 1.05
+Version: 1.0
 Description: Healthruwords Slider Widget is a responsive slider widget that shows 20 latest Quotes from Healthruwords API.
 Author: Arnaud Saint-Paul
 Author URI: http://healthruwords.com/
@@ -54,8 +54,7 @@ class HealthruwordsSlider extends WP_Widget {
 		add_action( 'wp_enqueue_scripts', array( $this,	'healthruwords_enqueue' ) );
 		
 		// Enqueue Plugin Styles and scripts for admin pages
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ) );
-		
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ) );		
 
 	}
 
@@ -610,6 +609,7 @@ class HealthruwordsSlider extends WP_Widget {
 			$username  = $args['username'];
 			$image_url = $args['image'];
 			$seo=$args['prefix'].' - '.$caption;
+			$seo_logo='HealThruWords, Inspirational Images and Healing Quotes - '.$caption;
 			
 		
 		$time="";
@@ -679,7 +679,7 @@ class HealthruwordsSlider extends WP_Widget {
 							if ( $caption != '') {
 								//$caption   = preg_replace( '/@([a-z0-9_]+)/i', '&nbsp;<a href="http://healthruwords.com/$1" rel="nofollow" target="_blank">@$1</a>&nbsp;', $caption );
 								$output .= "<span class='jr-insta-caption'><a href='" . $link_to . "' target='_blank' class='".$args
-								['image_link_class']."' title='".$seo."' alt='".$seo."'>{$caption}</a><a href='".$logo_link_to."' title='".$seo."' alt='".$seo."' target='_blank'><img src='https://healthruwords.com/wp-content/uploads/2014/10/logo-healthruwords.com_.png' width='155' height='35' style='float:right;' title='".$seo."' alt='".$seo."'></a></span>\n";
+								['image_link_class']."' title='".$seo."' alt='".$seo."'>{$caption}</a><a href='".$logo_link_to."' title='".$seo."' alt='".$seo."' target='_blank'><img src='https://healthruwords.com/wp-content/uploads/2014/10/logo-healthruwords.com_.png' width='155' height='35' style='float:right;' title='".$seo_logo."' alt='".$seo_logo."'></a></span>\n";
 							}
 
 						$output .= "</div>\n";
